@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -62,9 +63,10 @@ public class AdminServiceImpl  implements AdminService{
 	}
 
 	@Override
-	public void memberAllList(Model model) {	
-		model.addAttribute("memberList", adminMapper.memberList());		
+	public ArrayList<AdminDTO> memberAllList(Model model) {	
+		ArrayList<AdminDTO>  memList = adminMapper.memberList();		
 		System.out.println("memberLis로 들어");
+		return memList;
 	}
 
 	@Override
@@ -93,8 +95,9 @@ public class AdminServiceImpl  implements AdminService{
 	}
 
 	private void autoLogin(HttpSession session, HttpServletResponse response) {
-		System.out.println("session.getId??" + session.getId());
-		Cookie loginCookie = new Cookie("loginCookie" , session.getId());
+		System.out.println("session.getAttribute??" + session.getAttribute("userName"));
+//		Cookie loginCookie = new Cookie("loginCookie" , session.getId());
+		Cookie loginCookie = new Cookie("loginCookie" , (String) session.getAttribute("userName"));
 		loginCookie.setPath("/");  // 최상위, 모든 경로에서 다 사용하겠다 
 		loginCookie.setMaxAge(60*60*24*7); 
 		response.addCookie(loginCookie);
@@ -131,6 +134,26 @@ public class AdminServiceImpl  implements AdminService{
 				return "{\"result\" : 2}";  // 형식 안맞음 
 			}
 		}	
+	}
+
+	@Override
+	public String forgotPwdCheck(String userEmail, String userPhone) {
+		AdminDTO dto = adminMapper.forgotPwdCheck(userEmail);
+		System.out.println("okokok ");
+		if(dto != null) {
+			if(userPhone.equals(dto.getUserPhone())) { 
+				System.out.println("111");
+				return "{\"result\" : 1}";  ///  임시비번 발급 - js로 
+			}else { 
+				System.out.println("000");
+				return "{\"result\" : 0}";  // 폰번호 안맞음 
+			}
+		}else {
+			System.out.println("222");
+			return "{\"result\" : 2}";  // 없는 이메일 
+		}
+		
+		
 	}
 
 

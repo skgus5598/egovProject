@@ -13,5 +13,6 @@ public interface AdminMapper {
 	public AdminDTO loginCheck( String userEmail);
 	public AdminDTO userNickCheck(String userNick);
 	public AdminDTO userEmailCheck(String userEmail);
+	public AdminDTO forgotPwdCheck(String userEmail);
 
 }

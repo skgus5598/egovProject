@@ -135,7 +135,7 @@
                         <a class="collapse-item" href="#">QnA</a>
                          <div class="collapse-divider"></div>
                         <h6 class="collapse-header">ADMIN PAGES:</h6>
-                        <a class="collapse-item" href="${contextPath }/memberList.do">Member management</a>
+                        <a class="collapse-item" href="${contextPath }/memberListPage.do">Member management</a>
                     </div>
                 </div>
             </li>

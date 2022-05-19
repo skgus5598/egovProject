@@ -37,7 +37,7 @@
 <script>
 	var resultColName=['이름', '닉네임', '메일' , '핸드폰번호', '주소', '유저권한', '탈퇴여부'];
  	var resultColModel = [
-		{name:'userName'},
+		{name:'userName' },
 		{name:'userNick'},
 		{name:'userEmail'},
 		{name:'userPhone'},
@@ -45,40 +45,32 @@
 		{name:'userAuth'},
 		{name:'delYn'}
 	]; 
-/* 	var resultColModel = [
-		{name:'${list.userName}'},
-		{name:'${list.userNick}'},
-		{name:'${list.userEmail}'},
-		{name:'${list.userPhone}'},
-		{name:'${list.userAddr}'},
-		{name:'${list.userAuth}'},
-		{name:'${list.delYn}'}
-	]; */
 
-	
+
 	$(function(){
+		console.log("oo");
+		
 		$("#mainGrid").jqGrid({
 			url:"${contextPath}/memberList.do",
-			dataType : "JSON",
-			jsonReader:{
-				root:'list',
-				repeatitems: false
-			},			
-			mtype:"get",
+			dataType : "json",	
+			contentType:"application/json; charset=UTF-8",
+			mtype:"POST",
+			data:"memList",
 			colNames: resultColName,
 			colModel: resultColModel,
 			caption:"회원목록",
 			rowNum : 10,
 			rowList:[10,20,30],
 			viewrecords : true,
-			pager: "#pager",
-			cellsubmit:'remote'
+			pager: "#pager"
+//			cellsubmit:'remote'
 //			height: 200,
 //			width : 1000,
 			
 		});
+		console.log("ooooo");
 	});
-	
+
 
 
 </script>
@@ -122,7 +114,7 @@
                         <a class="collapse-item" href="#">QnA</a>
                          <div class="collapse-divider"></div>
                         <h6 class="collapse-header">ADMIN PAGES:</h6>
-                        <a class="collapse-item" href="${contextPath }/memberList.do">Member management</a>
+                        <a class="collapse-item" href="${contextPath }/memberListPage.do">Member management</a>
                     </div>
                 </div>
             </li>

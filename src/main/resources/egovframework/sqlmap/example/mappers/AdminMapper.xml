@@ -18,12 +18,22 @@
 	</resultMap>
 	
 	 <select id="memberList" resultMap="admin">
-    	SELECT * from custom_user 
+    	SELECT 
+    				custom_user_name, 
+    				custom_user_nick, 
+    				custom_user_email,   
+    				custom_user_phone,
+    				custom_user_address,
+    				custom_user_auth,
+    				custom_user_del_yn
+    	FROM custom_user 
     	ORDER BY custom_user_seq desc;
     </select>
     
     <select id="loginCheck" resultMap="admin">
-    	SELECT custom_user_email, custom_user_pswd , custom_user_Name
+    	SELECT custom_user_email
+    	             , custom_user_pswd
+    	             , custom_user_Name
     	FROM custom_user 
     	WHERE custom_user_email = #{userEmail}
     </select>
@@ -42,11 +52,45 @@
 	
 	
 	<insert id="registerAdmin" useGeneratedKeys="true" keyProperty="custom_user_seq">
-		INSERT INTO custom_user(custom_user_seq, custom_user_name, custom_user_nick, custom_user_email,
-		custom_user_pswd, custom_user_birth, custom_user_phone, custom_user_address, 
-		custom_user_auth, custom_user_del_yn, custom_user_reg_date, custom_user_mod_date)
-		VALUES(#{userSeq}, #{userName}, #{userNick}, #{userEmail}, #{userPwd}, 
-		#{userBirth}, #{userPhone}, #{userAddr}, '2', 'N', #{regDate}, #{regDate})
+		INSERT INTO custom_user
+								(custom_user_seq, 
+								custom_user_name, 
+								custom_user_nick, 
+								custom_user_email,
+								custom_user_pswd, 
+								custom_user_birth, 
+								custom_user_phone, 
+								custom_user_address, 
+								custom_user_auth, 
+								custom_user_del_yn, 
+								custom_user_reg_date, 
+								custom_user_mod_date)
+		VALUES	(
+								#{userSeq}, 
+								 #{userName}, 
+								 #{userNick}, 
+								 #{userEmail}, 
+								 #{userPwd}, 
+								 #{userBirth}, 
+								 #{userPhone}, 
+								 #{userAddr}, 
+								 '2', 
+								 'N',
+								  #{regDate},
+								  #{regDate}
+							)
 	</insert>
+	
+	
+	<select id="forgotPwdCheck" resultMap="admin">
+		SELECT
+				custom_user_email,
+				custom_user_phone
+		FROM
+				custom_user
+		WHERE
+				custom_user_email = #{userEmail}
+	</select>
+	
 	
 </mapper>

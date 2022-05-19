@@ -1,5 +1,7 @@
 package egovframework.example.sample.web.admin.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,11 +29,18 @@ public class CustomUserController {
 		adminService.registerAccount(dto, response, request);
 	}
 	
+	@RequestMapping("memberListPage.do")
+	public String memberListPage() {
+		return "admin/memberList";
+	}
+	
 	@RequestMapping("memberList.do")
-	public String memberList(Model model) {
-		System.out.println("hhere??");
-		adminService.memberAllList(model);
-		return "memberList";
+	@ResponseBody
+	public ArrayList<AdminDTO> memberList(Model model) {
+		ArrayList<AdminDTO> memList =adminService.memberAllList(model);
+		System.out.println("hhere??list?" + memList.toString());
+		return memList;
+
 	}
 	
 	@GetMapping(value = "userNickCheck.do",  produces = "application/json;charset=utf-8")
@@ -46,6 +55,11 @@ public class CustomUserController {
 		return adminService.userEmailCheck(userEmail);
 	}
 	
+	@PostMapping(value="forgotPwCheck.do", produces="application/json;charset=utf-8")
+	@ResponseBody
+	public String forgotPwd(@RequestParam String userEmail, @RequestParam String userPhone) {
+		return adminService.forgotPwdCheck(userEmail, userPhone);
+	}
 	
 	
 	

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sample.web.mapper.BoardMapper">
+
+	<resultMap id="board" type="egovframework.example.sample.web.board.dto.BoardDTO">
+		<result property="boardSeq" column="board_seq"/>
+		<result property="boardTitle" column="board_title"/>
+		<result property="boardText" column="board_text"/>
+		<result property="boardWriter" column="board_writer"/>
+		<result property="regDate" column="board_reg_date"/>
+		<result property="modDate" column="board_mod_date"/>
+		<result property="imgPath" column="board_img_path"/>
+		<result property="delYn" column="board_del_yn"/>
+	</resultMap>
+	
+<!-- 	<select id="boardList" resultMap="board">
+		SELECT * from general_board 
+		WHERE board_del_yn='N';
+	</select> -->
+	
+	<select id="boardList" resultMap="board">
+		SELECT C.* from
+			(SELECT @ROWNUM := @ROWNUM +1 AS rn, A.* FROM
+				(SELECT * FROM general_board 
+				  WHERE board_title 
+				  LIKE CONCAT('%', #{keyword} , '%')
+				  AND board_del_yn='N'
+				  ORDER BY board_seq DESC)A,
+				  (SELECT @ROWNUM:=0)B
+				  )C
+		WHERE rn BETWEEN #{s} AND #{e}
+	</select>
+	
+	<select id="getCount"  resultType="Integer">
+		SELECT count(*)
+		FROM general_board
+		WHERE board_title
+		LIKE CONCAT('%', #{keyword}, '%')
+		AND board_del_yn='N'
+	</select>
+	
+	
+	<insert id="addContent" useGeneratedKeys="true" keyProperty="board_seq">
+	 	INSERT INTO general_board(board_seq, board_title, board_text, board_writer, board_reg_date, board_mod_date, board_img_path, board_del_yn)
+	 	VALUES (#{boardSeq}, #{boardTitle}, #{boardText}, #{boardWriter}, #{regDate}, #{regDate}, #{imgPath}, 'N')
+	</insert>
+	
+	<select id="writeView" resultMap="board">
+		select * from general_board where board_seq = #{boardSeq}
+	</select>
+	
+	
+	<update id="deleteList"  parameterType="java.util.List">  <!-- delete안하고 상태만 바꼬줌  -->
+		UPDATE general_board 
+		SET board_del_yn ='Y'
+		WHERE board_seq in
+		<foreach collection="list" item="item"  open="(" close=")"  separator=",">
+		 #{item}
+		</foreach>
+	</update>
+	
+	<update id="deleteImgFile"  > 
+		UPDATE general_board 
+		SET board_img_path =""
+		WHERE board_seq=#{boardSeq}
+	</update>
+
+	<update id="updateContent">
+		UPDATE general_board 
+		SET board_title=#{boardTitle},  board_text=#{boardText}, board_mod_date=#{modDate}, board_img_path=#{imgPath}
+		WHERE board_seq=#{boardSeq}
+	</update>
+	
+</mapper>

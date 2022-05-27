@@ -73,13 +73,8 @@
 		
 		alert("임시 비밀번호는 " + temp_pw + " 입니다.");
 	//	$(".btn_noimg random_pw").hide();
-	//	$("#random_pw").text(temp_pw);
-		
+		$("#random_pw").text("임시비밀번호 : "+temp_pw);		
 	}
-
-	
-	
-	
 
 </script>
 
@@ -117,6 +112,10 @@
                                             Issuing a temporary password
                                         </button>
                                     </form>
+                                    
+                                    <div id="random_pw">
+                                    	
+                                    </div>
                                     
                                     <hr>
                                     <div class="text-center">

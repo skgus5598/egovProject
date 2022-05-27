@@ -117,7 +117,7 @@
 
 
             <!-- Nav Item - Pages Collapse Menu -->
-                   <li class="nav-item">
+                <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -125,14 +125,14 @@
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                           <h6 class="collapse-header">Login Screens:</h6>
+                        <h6 class="collapse-header">Login Screens:</h6>
                         <a class="collapse-item" href="${contextPath }/loginForm.do">Login</a>
                         <a class="collapse-item" href="${contextPath }/registerForm.do">Register</a>                        
                         <a class="collapse-item" href="${contextPath }/forgotPw.do">Forgot Password</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
                         <a class="collapse-item" href="${contextPath }/boardList.do">Board</a>
-                        <a class="collapse-item" href="#">QnA</a>
+                        <a class="collapse-item" href="${contextPath }/wordle.do">Wordle</a>
                          <div class="collapse-divider"></div>
                         <h6 class="collapse-header">ADMIN PAGES:</h6>
                         <a class="collapse-item" href="${contextPath }/memberListPage.do">Member management</a>

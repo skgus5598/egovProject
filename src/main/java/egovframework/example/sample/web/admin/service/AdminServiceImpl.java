@@ -63,7 +63,7 @@ public class AdminServiceImpl  implements AdminService{
 	}
 
 	@Override
-	public ArrayList<AdminDTO> memberAllList(Model model) {	
+	public ArrayList<AdminDTO> memberAllList() {	
 		ArrayList<AdminDTO>  memList = adminMapper.memberList();		
 		System.out.println("memberLis로 들어");
 		return memList;

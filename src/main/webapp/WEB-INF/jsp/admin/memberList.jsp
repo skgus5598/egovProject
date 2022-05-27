@@ -24,48 +24,62 @@
 
     <!-- Custom styles for this page -->
     <link href="${contextPath }/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+      <link href="${contextPath}/vendor/jquery/jquery-ui.css" rel="stylesheet">
+    <link href="${contextPath }/jqgrid/css/ui.jqgrid.css" rel="stylesheet">
     
 </head>
 <!-- 
 <script src="//code.jquery.com/jquery-1.11.0.min.js" > </script>
  -->
  <script src="${contextPath }/vendor/jquery/jquery.min.js"></script>
-<script src="${contextPath }/vendor/jquery/jquery-ui.js" > </script>
-<script src="${contextPath }/jqgrid/js/jquery.jqGrid.js" > </script>
+ <script src="${contextPath }/jqgrid/js/i18n/grid.locale-kr.js" > </script>
+<script src="${contextPath }/jqgrid/js/minified/jquery.jqGrid.min.js" > </script>
 
 
 <script>
 	var resultColName=['이름', '닉네임', '메일' , '핸드폰번호', '주소', '유저권한', '탈퇴여부'];
  	var resultColModel = [
-		{name:'userName' },
-		{name:'userNick'},
-		{name:'userEmail'},
-		{name:'userPhone'},
-		{name:'userAddr'},
-		{name:'userAuth'},
-		{name:'delYn'}
+		{name : "userName", index : "userName" },
+		{name : "userNick", index : "userNick"},
+		{name : "userEmail", index : "userEmail"},
+		{name : "userPhone", index : "userPhone"},
+		{name : "userAddr", index : "userAddr"},
+		{name : "userAuth", index : "userAuth"},
+		{name : "delYn", index : "delYn"}
 	]; 
+ 	/*
+  	var resultColModel2=[
+		{name : 'custom_user_name', index : 'custom_user_name' },
+		{name : 'custom_user_nick', index : 'usercustom_user_nickNick'},
+		{name : 'custom_user_email', index : 'custom_user_email'},
+		{name : 'custom_user_phone', index : 'custom_user_phone'},
+		{name : 'custom_user_address', index : 'custom_user_address'},
+		{name : 'custom_user_auth', index : 'custom_user_auth'},
+		{name : 'custom_user_del_yn', index : 'custom_user_del_yn'}
+ 	]; 
+ */
+// name : 서버로부터 넘어오는 데이터명 명시 /꼭 컬럼(VO)과 매칭을 시켜줘야하며 colName 개수와 일치
+// index : 서버로 전송 시 넘어가는 데이터명
 
 
 	$(function(){
-		console.log("oo");
-		
 		$("#mainGrid").jqGrid({
 			url:"${contextPath}/memberList.do",
 			dataType : "json",	
-			contentType:"application/json; charset=UTF-8",
-			mtype:"POST",
-			data:"memList",
+			mtype:"get",
+//			data: "memList",
 			colNames: resultColName,
 			colModel: resultColModel,
 			caption:"회원목록",
 			rowNum : 10,
 			rowList:[10,20,30],
 			viewrecords : true,
-			pager: "#pager"
-//			cellsubmit:'remote'
-//			height: 200,
-//			width : 1000,
+			pager: "#pager",
+			loadError : function(xhr, status, error){
+				alert(xhr.responseText);
+			}, loadComplete : function(data){
+				alert("success");
+			}
 			
 		});
 		console.log("ooooo");
@@ -96,7 +110,7 @@
 
 
             <!-- Nav Item - Pages Collapse Menu -->
-                   <li class="nav-item">
+                 <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -104,14 +118,14 @@
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                           <h6 class="collapse-header">Login Screens:</h6>
+                        <h6 class="collapse-header">Login Screens:</h6>
                         <a class="collapse-item" href="${contextPath }/loginForm.do">Login</a>
                         <a class="collapse-item" href="${contextPath }/registerForm.do">Register</a>                        
                         <a class="collapse-item" href="${contextPath }/forgotPw.do">Forgot Password</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
                         <a class="collapse-item" href="${contextPath }/boardList.do">Board</a>
-                        <a class="collapse-item" href="#">QnA</a>
+                        <a class="collapse-item" href="${contextPath }/wordle.do">Wordle</a>
                          <div class="collapse-divider"></div>
                         <h6 class="collapse-header">ADMIN PAGES:</h6>
                         <a class="collapse-item" href="${contextPath }/memberListPage.do">Member management</a>

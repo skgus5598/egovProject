@@ -34,10 +34,10 @@ public class CustomUserController {
 		return "admin/memberList";
 	}
 	
-	@RequestMapping("memberList.do")
+	@GetMapping(value = "memberList.do",  produces = "application/json;charset=utf-8")
 	@ResponseBody
-	public ArrayList<AdminDTO> memberList(Model model) {
-		ArrayList<AdminDTO> memList =adminService.memberAllList(model);
+	public ArrayList<AdminDTO> memberList(HttpServletResponse response, HttpServletRequest request) {
+		ArrayList<AdminDTO> memList =adminService.memberAllList();
 		System.out.println("hhere??list?" + memList.toString());
 		return memList;
 

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 
 <!DOCTYPE html>
@@ -14,35 +14,233 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>SB Admin 2 - Dashboard</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link href="${contextPath }/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="${contextPath }/css/sb-admin-2.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this page -->
-    <link href="${contextPath }/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+ <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+ 
+<style type="text/css">
+
+#tempTable {
+	background-color:white;
+	text-align:center;
+	border: orange;
+	margin-left: 100px;
+	margin-top: 100px;
+	border-spacing: 50px;
+	border-collapse: seperate;
+}
+
+#tempTable td{
+	width:70px;
+	height:70px;
+}
+
+#tempTable input{
+	border:0;
+	width:50px;
+	height:50px;
+	font-size: xx-large;
+	text-align: center;
+	color : transparent;
+	text-shadow: 0 0 0 black;
+}
+
+
+
+
+#buttonTd{
+		border: 0px;
+}
+
+#btn2, #btn3, #btn4, #btn5, #btn6  {
+	display: none;
+}
+
+
+
+
+</style>
 
 <script>
-	function readURL(input){
-		const file = input.files[0]
-		if(file !=''){
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onload = function(e){
-				$('#preview').attr('src', e.target.result);  
+/*  얘는 제이쿼리 script 추가해야 쓸 수 있음. document.ready랑 같은 역할 
+	$(function (){
+		$("input").focus(function(){
+		})
+	
+	});
+*/
+
+
+
+
+	function wordCheck(num){
+	
+		var originWord = $('input[name=originWord]').val();
+		
+		var a =  $('input[name='+num+'a]').val().toUpperCase();
+		var b = $('input[name='+num+'b]').val().toUpperCase();
+		var c = $('input[name='+num+'c]').val().toUpperCase();
+		var d = $('input[name='+num+'d]').val().toUpperCase();
+		var e = $('input[name='+num+'e]').val().toUpperCase();
+		
+		// 빈칸 체크  
+		if((a+b+c+d+e).length != 5){ 
+			alert("빠짐없이 입력해 주세요! ");			
+			if(a == ''){
+				return keyUp(num, 'a')				
+			}else if(b == ''){
+				return keyUp(num, 'b')				
+			}else if(c == ''){
+				return keyUp(num, 'c')				
+			}else if(d == ''){
+				return keyUp(num, 'd')				
+			}else if(e == ''){
+				return keyUp(num, 'e')				
+			}
+		}		
+				
+		if((a+b+c+d+e).toUpperCase() == originWord){
+			alert("정답입니다!!");
+			if(!confirm('한번 더!?')){
+				return false;
+			}else{
+				location.href="${contextPath}/wordle.do";
 			}
 		}
+		
+		if(originWord.includes(a)){ // 문자 포함여부 
+			if(originWord.charAt(0) == a){ // 문자열 인덱스 위치 동일 여부 
+				$('input[name='+num+'a]').css('background-color', 'skyblue');
+			}else{
+				$('input[name='+num+'a]').css('background-color', 'yellow');
+			}		
+		}
+		
+		if(originWord.includes(b)){
+			if(originWord.charAt(1) == b){  
+				$('input[name='+num+'b]').css('background-color', 'skyblue');
+			}else{
+				$('input[name='+num+'b]').css('background-color', 'yellow');
+			}
+		}
+		
+		if(originWord.includes(c)){
+			if(originWord.charAt(2) == c){ 
+				$('input[name='+num+'c]').css('background-color', 'skyblue');
+			}else{
+				$('input[name='+num+'c]').css('background-color', 'yellow');
+			}
+		}
+		
+		if(originWord.includes(d)){
+			if(originWord.charAt(3) == d){ 
+				$('input[name='+num+'d]').css('background-color', 'skyblue');
+			}else{
+				$('input[name='+num+'d]').css('background-color', 'yellow');
+			}
+		}
+		
+		if(originWord.includes(e)){
+			if(originWord.charAt(4) == e){ 
+				$('input[name='+num+'e]').css('background-color', 'skyblue');
+			}else{
+				$('input[name='+num+'e]').css('background-color', 'yellow');
+			}
+		}
+		
+		if(num!= 6){
+			//이전  제출 버튼 숨기기
+			$('#btn'+num ).css('display', 'none');
+			//다음 줄  제출 버튼 보이기  + 텍스트상자 포커스 
+			$('#btn'+(num+1)).css('display', 'inline');
+			keyUp((num+1),'');
+			
+		} else{   // 6번 시도 후 실패 시 
+			$('#btn'+num ).css('display', 'none');
+			alert("실패!!!!!!!!!!!!!");
+			location.href="${contextPath}/wordle.do";
+		}
 	}
+	
 
+//한글 입력 방지
+function fn_press_han(){
+	$("input").keyup(function(event){
+		if (!(event.keyCode >=37 && event.keyCode<=40)) {
+			var inputVal = $(this).val();
+			$(this).val(inputVal.replace(/[^a-z]/gi,''));		
+		}
+	});	
+}
+
+
+
+
+//  옆칸으로 이동 
+	function keyUp(num, obj){		
+		if(num != 7){
+			if(obj == ''){
+				$('input[name='+num+'a]').focus();
+			}else if(obj =='a'){
+				if($('input[name='+num+'a]').val() == ''){
+					$('input[name='+num+'a]').focus();
+				}else{
+					$('input[name='+num+'b]').focus();
+				}			
+			}else if(obj =='b'){
+				if($('input[name='+num+'b]').val() == ''){
+					$('input[name='+num+'b]').focus();
+				}else if($('input[name='+num+'a]').val() == ''){
+					$('input[name='+num+'b]').val('');
+					$('input[name='+num+'a]').focus();
+				}else{
+					$('input[name='+num+'c]').focus();
+				}
+			}else if(obj =='c'){
+				if($('input[name='+num+'c]').val() == ''){
+					$('input[name='+num+'c]').focus();
+				}else if($('input[name='+num+'b]').val() == ''){
+					$('input[name='+num+'c]').val('');
+					$('input[name='+num+'b]').focus();
+				}else{
+					$('input[name='+num+'d]').focus();
+				}	
+			}else if(obj =='d'){
+				if($('input[name='+num+'d]').val() == ''){
+					$('input[name='+num+'d]').focus();
+				}else if($('input[name='+num+'c]').val() == ''){
+					$('input[name='+num+'d]').val('');
+					$('input[name='+num+'c]').focus();
+				}else{
+					$('input[name='+num+'e]').focus();
+				}
+			}else if(obj =='e'){
+				if($('input[name='+num+'e]').val() == ''){
+					$('input[name='+num+'e]').focus();
+				}else if($('input[name='+num+'d]').val() == ''){
+					$('input[name='+num+'e]').val('');
+					$('input[name='+num+'d]').focus();
+				}
+			}
+		}
+		
+
+}
+	
 </script>
 
 </head>
+
+
 
 <body id="page-top">
 
@@ -57,17 +255,19 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">CUSTOM*_* <sup>2</sup></div>
             </a>
 
             <!-- Divider -->
-            <hr class="sidebar-divider my-0">
+            <hr class="sidebar-divider">
 
-
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                PAGES
+            </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-                   <li class="nav-item">
-               <li class="nav-item">
+                 <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -94,11 +294,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
+   
         </ul>
         <!-- End of Sidebar -->
 
@@ -112,11 +308,9 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <form class="form-inline">
-                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                    </form>
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
 
                     <!-- Topbar Search -->
                     <form
@@ -159,8 +353,7 @@
                             </div>
                         </li>
 
-                        <!-- Nav Item - Alerts -->
-                       
+                   
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -169,146 +362,75 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                  <c:if test="${userName != null }">  <!--  ${userName}은 세션으로 줌  -->
-		                               ${userName }
-		                          </c:if>
-		                          <c:if test="${userName == null }">
-		                               Guest 
+                               <c:if test="${userName != null }">  <!--  ${userName}은 세션으로 줌  -->
+                               ${userName }
+                               </c:if>
+                               <c:if test="${userName == null }">
+                               Guest 
                                </c:if>
                                 </span>
                                 <img class="img-profile rounded-circle"
-                                    src="${contextPath }/img/undraw_profile.svg">
+                                    src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                   <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <c:if test="${userName != null }">                                            
-                                <a class="dropdown-item" href="${contextPath }/admin/logout.do" >
+                                <a class="dropdown-item" href="admin/logout.do" >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
                                 </c:if>
                     			<c:if test="${userName == null }">
-                    			  <a class="dropdown-item" href="${contextPath }/loginForm.do" >
+                    			  <a class="dropdown-item" href="loginForm.do" >
                                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                   Login
                                 </a>
-                                </c:if>
+                    			</c:if>                              
                             </div>
                         </li>
-
                     </ul>
-
                 </nav>
-                <!-- End of Topbar -->
+		
+		<h1> Wordle !</h1>
+		<h2>check : ${originWord }</h2>
+		<input type="hidden" name="originWord" value="${originWord }" >
+		
+	
+			<table id="tempTable"  border="1">
+				<c:forEach var="num" begin="1" end="6" >
+					<tr id="${num }">
+						<td><input type="text"  name="${num}a"    onkeyup="keyUp('${num}', 'a')"  onkeydown="fn_press_han()" maxlength="1" style="ime-mode:disabled;"></td>
+						<td><input type="text"  name="${num}b"    onkeyup="keyUp('${num}' , 'b')"  onkeydown="fn_press_han()" maxlength="1" style="ime-mode:disabled;"></td>
+						<td><input type="text"  name="${num}c"  onkeyup="keyUp('${num}', 'c')"  onkeydown="fn_press_han()" maxlength="1" style="ime-mode:disabled;"></td>
+						<td><input type="text"  name="${num}d"   onkeyup="keyUp('${ num}', 'd')" onkeydown="fn_press_han()" maxlength="1" style="ime-mode:disabled;"></td>
+						<td><input type="text"  name="${num}e"  onkeyup="keyUp('${num}', 'e')" onkeydown="fn_press_han()"  maxlength="1" style="ime-mode:disabled;"></td>
+						<td id="buttonTd"><button id="btn${num}"  type="button" onclick="wordCheck(${num})" >제출</button></td>
+					</tr>			
+				</c:forEach>
+			</table>
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">General Forum</h1>
-
-						
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                           	<c:if test="${userName == null }">
-                           		로그인 후 이용 가능합니다!
-                           	</c:if>
-                            <c:if test="${userName != null }">
-                            <form action="${contextPath }/board/addContent.do" method="post" enctype="multipart/form-data">
-                            
-                                <table class="table table-bordered" width="100%" cellspacing="0">
-                              		<tr>
-                              			<td>게시판 타입</td>
-                              			<td>자유게시판</td>
-                              		</tr>
-                              			<tr>
-                              			<td>작셩자</td>
-                              			<td>
-                              				<input type="text" style="width:200px"  value="${userName }" name="boardWriter" disabled />
-                              			</td>
-                              		</tr>
-                              			<tr>
-                              			<td>제목</td>
-                              			<td>
-                              				<input type="text" style="width:500px;"  name="boardTitle">                              				
-                              			</td>
-                              		</tr>
-                              			<tr>
-                              			<td>내용</td>
-                              			<td>
-                              				<textarea rows="5" cols="70" name="boardText"></textarea>
-                              				
-                              			</td>
-                              		</tr>
-                              			<tr>
-                              			<td>파일</td>
-                              			<td>
-                              				<input type="file" onchange="readURL(this)" name="imgPath">
-                              				<img id="preview" />
-                              			</td>
-                              		</tr>
-                              
-                                </table>                                
-                                <button type="button" onclick='location.href="${contextPath}/boardList.do" '   > 목록으로 </button>
-                                <button type="submit"> SAVE</button>
-                                
-                                </form>
-                            
-                            
-                           	</c:if>
-                            
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
+			</div>
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
 
 
 
     <!-- Bootstrap core JavaScript-->
-    <script src="${contextPath }/vendor/jquery/jquery.min.js"></script>
-    <script src="${contextPath }/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="${contextPath }/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="${contextPath }/js/sb-admin-2.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="${contextPath }/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="${contextPath }/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="${contextPath }/js/demo/datatables-demo.js"></script>
 
 </body>
 

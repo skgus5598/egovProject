@@ -67,7 +67,7 @@
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
                         <a class="collapse-item" href="${contextPath }/boardList.do">Board</a>
-                        <a class="collapse-item" href="#">QnA</a>
+                        <a class="collapse-item" href="${contextPath }/wordle.do">Wordle</a>
                          <div class="collapse-divider"></div>
                         <h6 class="collapse-header">ADMIN PAGES:</h6>
                         <a class="collapse-item" href="${contextPath }/memberListPage.do">Member management</a>

@@ -106,10 +106,9 @@ public class AdminDTO {
 	}
 	@Override
 	public String toString() {
-		return "[userSeq=" + userSeq + ", userName=" + userName + ", userNick=" + userNick + ", userEmail="
-				+ userEmail + ", userPwd=" + userPwd + ", userBirth=" + userBirth + ", userPhone=" + userPhone
-				+ ", userAddr=" + userAddr + ", userAuth=" + userAuth + ", delYn=" + delYn + ", regDate=" + regDate
-				+ ", modDate=" + modDate + ", userPwdCheck=" + userPwdCheck + ", autoLogin=" + autoLogin + "]";
+		return "[userName=" + userName + ", userNick=" + userNick + ", userEmail="
+				+ userEmail + ", userPhone=" + userPhone
+				+ ", userAddr=" + userAddr + ", userAuth=" + userAuth + ", delYn=" + delYn + "]";
 	}
 
 	
